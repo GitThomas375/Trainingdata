@@ -1,0 +1,8 @@
+syntax = "proto2"
+
+package generator;
+
+message mess
+{
+	required int32 test;
+}
