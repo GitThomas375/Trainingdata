@@ -18,7 +18,8 @@
 #include <iostream>
 #include <random>
 
-#include "bigint/BigIntegerLibrary.hh"
+
+using namespace std;
 
 uint64_t timeSinceEpochMillisec() {
 	using namespace std::chrono;
@@ -164,7 +165,7 @@ uint32_t solve_score_ILP(uint32_t node)
 				model.addConstr(constr);
 			}
 
-	//model.set(GRB_IntParam_Threads, 1);
+	model.set(GRB_IntParam_Threads, 1);
 
 	model.optimize();
 
@@ -172,6 +173,8 @@ uint32_t solve_score_ILP(uint32_t node)
 
 //	printf("mit %u ganz links kann man %f kreuzungen minimal erreichen\n\n", node, model.get(GRB_DoubleAttr_ObjVal));
 }
+
+void solve_score_ILP_efficient();
 
 //time ist die zeit in millisekunden in denen Trainingsdaten generiert werden sollen
 void safe_score_ILP_training_sess(std::string path, uint32_t time)
@@ -197,15 +200,15 @@ void safe_score_ILP_training_sess(std::string path, uint32_t time)
 		{
 			uint32_t probs[] = { 5,10,20,30,40,50,60,70,80,90 };
 			//prob = probs[rand() % 10];
-			prob = (rand() % 25) + 5;
-			links = (rand() % 15) + 5;
-			links = 5;
-			rechts = (rand() % 15) + 5;
-			rechts = 5;
+			prob = (rand() % 30) + 5;
+			links = (rand() % 25) + 20;
+
+			rechts = links + (rand() % 11) - 5;
+
 		}
 
 		generate_graph_matrix();
-		solve_score_ILP();
+		solve_score_ILP_efficient();
 
 		graph->set_right(rechts);
 
@@ -447,164 +450,13 @@ void solve_ILP()
 }
 
 
-
-//Berechnet a^b
-BigInteger power(BigInteger a, BigInteger b)
-{
-	if (b == 1)
-		return a;
-	if (b % 2 == 0)
-		return power(a * a, b / 2);
-	else
-		return a * power(a * a, b / 2);
-}
-
-//Berechnet a*(a-1)*...*(a-(b-1))
-BigInteger restricted_factorial(BigInteger a, BigInteger b)
-{
-	if (b == 1)
-		return a;
-	else
-		return a * restricted_factorial(a - 1, b - 1);
-}
-
-// berechne a über b
-BigInteger bin_coeff(BigInteger a, BigInteger b)
-{
-	return restricted_factorial(a, b) / restricted_factorial(b, b);
-}
-
-
-int block_size = 9;
-// berechne zufallszahl z mit 1 <= z <= a
-BigInteger big_rand(BigInteger a)
-{
-	std::default_random_engine generator;
-	generator.seed((int)timeSinceEpochMillisec());
-	
-	std::string upper_bound_string = bigIntegerToString(a);
-	std::string random_number = "";
-
-	std::uniform_int_distribution<int> distribution(0, 999999999);
-
-	uint32_t num_blocks = (upper_bound_string.length() + (block_size - 1)) / block_size;
-
-	bool bounded = true;
-	for (uint32_t block = 0; block < num_blocks; block++)
-	{
-		int this_block;
-		if (bounded)
-		{
-			int first_bound_length = upper_bound_string.length() % block_size == 0 ? block_size : upper_bound_string.length() % block_size;
-			int bound_length = block == 0 ? first_bound_length : block_size;
-			int bound_offset = block == 0 ? 0 : first_bound_length + (block - 1) * block_size;
-
-			
-			std::string to_convert = upper_bound_string.substr(bound_offset, bound_length);
-
-			int bound = std::stoi(to_convert);
-
-			std::uniform_int_distribution<int> distribution(0, bound);
-			
-			this_block = distribution(generator);
-
-			if (this_block != bound)
-				bounded = false;
-		}
-		else
-		{
-			this_block = distribution(generator);
-		}
-		random_number += std::to_string(this_block);
-	}
-	BigInteger return_number = stringToBigInteger(random_number);
-
-	if (return_number > a)
-		std::cout << "error beim zufallszahlengenerator";
-	return return_number == 0 ? big_rand(a) : return_number;
-}
-
-
-//1 <= rand
-//return: n, sodass bin_coeff(n-1, k) < rand <= bin_coeff(n, k)
-BigInteger get_upper_bin_coeff(BigInteger k, BigInteger rand)
-{
-	BigInteger exp_fac = 2;
-
-	if (rand == 1)
-		return k;
-
-	//invariante: bin_coeff(lower_bound, k) < rand
-	BigInteger lower_bound = k;
-
-	//gesucht: upper_bound, sodass rand <= bin_coeff(upper_bound, k) 
-	BigInteger maybe_upper_bound = lower_bound * exp_fac;
-
-	while (bin_coeff(maybe_upper_bound, k) < rand)
-	{
-		lower_bound = maybe_upper_bound;
-		maybe_upper_bound = maybe_upper_bound * exp_fac;
-	}
-
-	BigInteger upper_bound = maybe_upper_bound;
-
-	while (upper_bound - lower_bound > 1)
-	{
-		BigInteger middle = (upper_bound + lower_bound) / 2;
-
-		if (bin_coeff(middle, k) >= rand)
-			upper_bound = middle;
-		else
-			lower_bound = middle;
-	}
-	
-	return upper_bound;
-}
-
-void generate_graph(uint32_t left, uint32_t right)
-{
-	links = left;
-	rechts = right;
-	for (uint32_t i = 0; i < links; i++) size_array[i] = 0; //size array initialisiert
-
-	BigInteger k = left;
-	BigInteger n = power(2, right);
-
-	while (k > 0)
-	{
-		BigInteger upper_bound = bin_coeff(n + k - 1, k);
-
-		BigInteger rand = big_rand(upper_bound);
-
-		BigInteger a = get_upper_bin_coeff(k, rand);
-
-		n = a - k + 1; //das hier ist die zufallszahl
-		k--;
-
-		std::cout << n << std::endl;
-
-		int node_representation = n.toInt() - 1;
-		int which_node = (k - 1).toInt();
-		
-		for (int i = 0; i < right; i++)
-		{
-			if (node_representation & 1 << i)
-				graph_matrix[which_node][size_array[which_node]++] = i;
-		}
-	}
-}
-
 int main(int argc, char *argv[])
 {
 	GOOGLE_PROTOBUF_VERIFY_VERSION;
 	
 	
-	//safe_score_ILP_training_sess("D:/Informatik/6. Semester/BachelorArbeit/Trainingsdaten/training_to_check_real.graphs", 10000);
+	safe_score_ILP_training_sess(string("D:/BachelorArbeit_Thomas/GurobiTest/TrainingData/") + string(argv[1] == NULL ? "training.graphs" : argv[1]));
 	
-	generate_graph_matrix();
-
-	solve_score_ILP();
-	solve_score_ILP_efficient();
 
 	return 0;
 }
