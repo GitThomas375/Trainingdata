@@ -4,7 +4,7 @@
 #include <string.h>
 #include <time.h>
 #include "gurobi_c++.h"
-#include "TrainingData/Proto/graph.pb.h"
+#include "trainingData/proto/graph.pb.h"
 #include <iostream>
 #include <fstream>
 
