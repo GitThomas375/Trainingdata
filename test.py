@@ -1,4 +1,4 @@
-#import tensorflow as tf
+import tensorflow as tf
 import example_pb2 as example
 import matplotlib.pyplot as plt
 import numpy as np
