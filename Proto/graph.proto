@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package instance;
+		
+message Data
+{
+	message Graph
+	{
+			
+		message Node
+		{
+			repeated int32 connectedto = 2;
+		}
+	
+		required int32 right = 1;		
+
+		repeated Node nodes = 3;
+
+		repeated int32 score = 4;
+	}
+	repeated Graph graph = 5;
+}

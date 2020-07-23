@@ -1,0 +1,32 @@
+syntax = "proto2";
+
+package example;
+		
+message Data
+{
+	message Graph
+	{
+			
+		message Node
+		{
+			repeated int32 connectedto = 2;
+		}
+	
+		required int32 right = 1;		
+
+		repeated Node nodes = 3;
+		
+		required int32 opt = 7;
+		required int32 learned_switch = 8;
+		required int32 learned_leftest_node = 9;
+		required int32 barycenter = 10;
+		required int32 greedy_insert = 11;
+		required int32 greedy_switch = 12;
+		required int32 median = 13;
+		required int32 sifting = 14;
+		required int32 split = 15;
+	}
+	
+	
+	repeated Graph graphs = 5;
+}
