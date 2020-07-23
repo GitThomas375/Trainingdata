@@ -1,5 +1,5 @@
 import tensorflow as tf
-import Proto/Linux/example_pb2 as example
+import example_pb2 as example
 import matplotlib.pyplot as plt
 import numpy as np
 
