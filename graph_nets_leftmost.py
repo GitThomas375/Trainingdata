@@ -345,9 +345,9 @@ class Model():
     
 batch_size_nodes = 300 * 12.5
 
-model = Model(2,80,17)
+model = Model(int(sys.argv[0]),int(sys.argv[1]),int(sys.argv[2]))
 
-for iteration in range(10):
+for iteration in range(int(sys.argv[3]):
 
   random.shuffle(all_graphs)
   i = 0
