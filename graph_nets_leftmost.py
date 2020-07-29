@@ -16,6 +16,7 @@ import keras
 import sonnet
 
 import sys
+import time
 
 import sonnet as snt
 import tensorflow as tf
@@ -26,7 +27,7 @@ SEED = 1
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
-
+current_time = lambda: int(round(time.time()))
 
 data = graph_pb2.Data()
 
@@ -345,8 +346,10 @@ batch_size_nodes = 1000 * 12.5
 
 model = Model(3,100,26)
 
-for iteration in range(10):
+start_time = current_time()
+time = 5 * 3600
 
+while current_time() - start_time < time
   random.shuffle(all_graphs)
   i = 0
   graphs = []
