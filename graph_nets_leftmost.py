@@ -341,7 +341,7 @@ class Model():
     gradients = tape.gradient(loss, variables)
     self._optimizer.apply_gradients(zip(gradients, variables))
     
-batch_size_nodes = 400 * 12.5
+batch_size_nodes = 1000 * 12.5
 
 model = Model(3,100,26)
 
