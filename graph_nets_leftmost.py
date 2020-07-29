@@ -347,9 +347,9 @@ batch_size_nodes = 600 * 12.5
 model = Model(3,100,26)
 
 start_time = current_time()
-time = 5 * 3600
+duration = 5 * 3600
 
-while current_time() - start_time < time:
+while current_time() - start_time < duration:
   random.shuffle(all_graphs)
   i = 0
   graphs = []
