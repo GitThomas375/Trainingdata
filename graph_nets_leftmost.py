@@ -15,6 +15,8 @@ import random
 import keras
 import sonnet
 
+import sys
+
 import sonnet as snt
 import tensorflow as tf
 
@@ -23,6 +25,10 @@ import os
 SEED = 1
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
+
+
+for eacharg in sys.argv:
+    print(eacharg)
 
 data = graph_pb2.Data()
 
