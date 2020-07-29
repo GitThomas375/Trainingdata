@@ -27,8 +27,6 @@ np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
 
-for eacharg in sys.argv:
-    print(eacharg)
 
 data = graph_pb2.Data()
 
@@ -343,11 +341,11 @@ class Model():
     gradients = tape.gradient(loss, variables)
     self._optimizer.apply_gradients(zip(gradients, variables))
     
-batch_size_nodes = 300 * 12.5
+batch_size_nodes = 400 * 12.5
 
-model = Model(int(sys.argv[0]),int(sys.argv[1]),int(sys.argv[2]))
+model = Model(3,100,26)
 
-for iteration in range(int(sys.argv[3])):
+for iteration in range(10):
 
   random.shuffle(all_graphs)
   i = 0
