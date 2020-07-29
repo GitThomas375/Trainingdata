@@ -348,7 +348,7 @@ batch_size_nodes = 600 * 12.5
 model = Model(3,100,26)
 
 start_time = current_time()
-duration = 100
+duration = 16*3600
 losses = []
 
 while current_time() - start_time < duration:
