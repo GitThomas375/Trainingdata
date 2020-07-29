@@ -349,7 +349,7 @@ model = Model(3,100,26)
 start_time = current_time()
 time = 5 * 3600
 
-while current_time() - start_time < time
+while current_time() - start_time < time:
   random.shuffle(all_graphs)
   i = 0
   graphs = []
