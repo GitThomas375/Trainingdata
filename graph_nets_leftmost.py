@@ -341,6 +341,7 @@ class Model():
     variables = self.get_variables()
     gradients = tape.gradient(loss, variables)
     self._optimizer.apply_gradients(zip(gradients, variables))
+    return loss.numpy()
     
 batch_size_nodes = 600 * 12.5
 
@@ -348,6 +349,7 @@ model = Model(3,100,26)
 
 start_time = current_time()
 duration = 5 * 3600
+losses = []
 
 while current_time() - start_time < duration:
   random.shuffle(all_graphs)
@@ -362,4 +364,9 @@ while current_time() - start_time < duration:
   targets = [[1 if i == np.amin(graph.score) else 0  for i in graph.score ] for graph in graphs]
   states = [[node.connectedto for node in graph.nodes]  for graph in graphs]
 
-  model.train(states, targets)
+  loss = model.train(states, targets)
+  if (len(losses) < 20 or loss < np.amax(losses[-20])):
+    model.save("model")
+  else:
+    model.load("model")
+    print("loss wäre " + str(loss) + ", wurde rückgängig gemacht")
