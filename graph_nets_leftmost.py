@@ -264,7 +264,6 @@ class Model():
 
     global_features = self._global_init
 
-      #kanten hinzufügen
     edges = []
     senders = []
     receivers = []
