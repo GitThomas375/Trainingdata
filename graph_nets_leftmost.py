@@ -343,7 +343,7 @@ class Model():
     self._optimizer.apply_gradients(zip(gradients, variables))
     return loss.numpy()
     
-batch_size_nodes = 600 * 12.5
+batch_size_nodes = 500 * 12.5
 
 model = Model(3,100,26)
 
