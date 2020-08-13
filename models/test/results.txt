@@ -1,0 +1,1 @@
+accuracy: 0.2672672672672673, loss: tf.Tensor(0.408894, shape=(), dtype=float32)
