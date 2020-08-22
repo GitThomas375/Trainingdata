@@ -1,1 +1,1 @@
-accuracy: 0.9294475806451612, loss: nan
+accuracy: 0.9235362903225808, loss: 0.0052133612, loss: 0.0052133612, batch size: 3750.0
