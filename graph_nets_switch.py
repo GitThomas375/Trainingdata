@@ -404,5 +404,5 @@ def train_model(batchsize_nodes, model, training_graphs, testing_graphs, target_
   text_file.write("accuracy: " + str(np.mean(final_accuracy)) + ", loss: " + str(np.mean(final_loss)) + ", loss: " + str(np.mean(final_loss)), + ", batchsize_nodes: " + str(batchsize_nodes))
   text_file.close()
   
- a = n_layer_Process_Encode_Decode(2,80,5)
+a = n_layer_Process_Encode_Decode(2,80,5)
 train_model(300*12.5,a,all_graphs,test_graphs,switch_score, "Trainingdata/models/n_layer_Process_Encode_Decode/switch(2,80,5)", 15,500)
