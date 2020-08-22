@@ -24,12 +24,18 @@ np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
 data = graph_pb2.Data()
-f = open("Trainingdata/training.switch", "rb")
+f = open("training.switch", "rb")
 data.ParseFromString(f.read())
 f.close()
 all_graphs = list(data.graph)
 print(len(all_graphs))
 all_graphs = [graph for graph in all_graphs if len([node for node in graph.nodes if len(node.connectedto)>0])>0]
+
+f = open("test.switch", "rb")
+data.ParseFromString(f.read())
+f.close()
+test_graphs = list(data.graph)
+test_graphs = [graph for graph in test_graphs if len([node for node in graph.nodes if len(node.connectedto)>0])>0]
 
 class Initializer(snt.initializers.Initializer):
   def __init__(self, variables):
@@ -405,4 +411,4 @@ def train_model(batchsize_nodes, model, training_graphs, testing_graphs, target_
   text_file.close()
   
 a = n_layer_Process_Encode_Decode(2,80,5)
-train_model(300*12.5,a,all_graphs,test_graphs,switch_score, "Trainingdata/models/n_layer_Process_Encode_Decode/switch(2,80,5)", 15,500)
+train_model(300*12.5,a,all_graphs,test_graphs,switch_score, "models/n_layer_Process_Encode_Decode/switch(2,80,5)", 15,500)
