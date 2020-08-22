@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import graph_pb2
+import example_pb2
+import time
 import random
 
 import matplotlib.pyplot as plt
