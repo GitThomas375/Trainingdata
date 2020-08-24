@@ -1,0 +1,1 @@
+accuracy: 0.7408492985971944, loss: 0.022754861, batchsize_nodes: 3750.0
